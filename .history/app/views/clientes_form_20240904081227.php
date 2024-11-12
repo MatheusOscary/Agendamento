@@ -1,0 +1,68 @@
+<div class="background-form">
+    <div class="modal-form-bg">
+        <div class="col-md-7 mt-5 px-2 py-3 modal-form">
+            <div class="row">
+                <div class="modal-title">
+                    Cadastrar Cliente
+                </div>
+            </div>
+            <div class="row">
+                <div class="modal-body">
+                    <form action="teste.php" class="needs-validation" novalidate>
+                        <div class="filters row">
+                            <div class="col-md-6 filter">
+                                <label for="Nome" class="control-label" >Nome</label>
+                                <input name="Nome" type="text" id="Nome" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-4 filter">
+                                <label for="Telefone" class="control-label" >Telefone</label>
+                                <input name="Telefone" type="text" id="Telefone" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-6 filter">
+                                <label for="Email" class="control-label" >E-mail</label>
+                                <input name="Email" type="email" id="Email" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3 filter">
+                                <label for="Data_aniversario" class="control-label" >Data de Aniversário</label>
+                                <input name="Data_aniversario" type="date" id="Data_aniversario" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3 filter">
+                                <label for="Genero" class="control-label" >Genêro</label>
+                                <select name="Genero" id="Genero" class="form-select form-select-sm" required>
+                                    <option selected>Selecione o Genêro</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="O">Outro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 filter">
+                                <label for="Estado" class="control-label" >Estado</label>
+                                <input name="Estado" type="text" id="Estado" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3 filter">
+                                <label for="Cidade" class="control-label" >Cidade</label>
+                                <input name="Cidade" type="text" id="Cidade" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-2 filter">
+                                <label for="Cep" class="control-label" >CEP</label>
+                                <input name="Cep" type="text" id="Cep" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3 filter">
+                                <label for="Bairro" class="control-label" >Bairro</label>
+                                <input name="Bairro" type="text" id="Bairro" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3 filter">
+                                <label for="Rua" class="control-label" >Rua</label>
+                                <input name="Rua" type="text" id="Rua" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-end mb-3">
+                        <button class="button-limpar mx-2">Cancelar</button>
+                            <button type="submit" class="button-buscar mx-2">Finalizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

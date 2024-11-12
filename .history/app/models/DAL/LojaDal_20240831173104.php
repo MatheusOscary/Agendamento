@@ -1,0 +1,3 @@
+<?php
+USE CONNECTION\Conexao
+?>

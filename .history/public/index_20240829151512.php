@@ -1,0 +1,28 @@
+<?php include '../app/views/header.php'; ?>
+<style>
+    .perfil-container{
+        background-color:#030712; 
+        height: 100vh;
+    }
+    .user-image{
+        
+    }
+</style>
+<div class="col-md-12 ">
+    <div class="col-md-2 perfil-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                Olá, Bem vindo...
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="user-image">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10 "></div>
+</div>
+<?php include '../app/views/footer.php'; ?>

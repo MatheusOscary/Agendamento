@@ -1,0 +1,261 @@
+<?php 
+include '../app/views/header.php'; 
+
+require_once '../app/models/BLL/LojaBll.php';
+require_once '../app/models/BLL/UsuarioBll.php';
+require_once '../app/models/BLL/ServicoBll.php';
+require_once '../app/models/BLL/ClienteBll.php';
+require_once '../app/models/BLL/AgendamentoBll.php';
+require_once '../app/models/BLL/HorarioBll.php';
+require_once '../app/helpers/obterDiaSemana.php';
+require_once '../app/helpers/ObterIntervalos.php';
+
+$servicoBll = new ServicoBll();
+$clienteBll = new ClienteBll();
+$lojaBll = new LojaBll();
+$loja = $lojaBll->select($_SESSION["Cod_loja"]);
+$imagem_loja = $loja->getImagem(); 
+
+$UsuarioBll = new UsuarioBll();
+$usuario = $UsuarioBll->select($_SESSION["Cod_usuario"]);
+?>
+<style>
+    .perfil-container{
+        background-color:#030712;
+        min-height: 100vh; 
+        height: auto;
+    }
+    .user-image{
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+    }
+    .shop-image{
+        overflow: hidden;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+    .job{
+        font-size: 14px;
+        border-bottom: solid #f5f5f5;
+    }
+    .group{
+        font-size: 14px;
+        color: #17A2B8;
+    }
+    .horario-list{
+        font-size: 24px;
+        color: #17A2B8;
+        font-weight: bold;
+    }
+    .option-menu{
+        height:32px;
+        background-color: #40475F;
+        color: #F5F5F5;
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        align-content: center;
+        cursor: pointer;
+        transition: filter 0.3s ease;
+        opacity: 0.7;
+    }
+    .option-menu.active{
+        opacity: 1;
+    }
+    .option-menu:hover{
+        filter: brightness(1.5);
+    }
+    .conteudo{
+        background-color: RGBA(64,71,95,0.5);
+    }
+    .horarios-listagem{
+        background-color: RGBA(64,71,95,0.6);
+        border-radius: 10px;
+    }
+    .list{
+        border-bottom: 1px solid RGBA(64,71,95,0.9);   
+    }
+    .list:last-child {
+        border-bottom: none;
+    }
+    .horario-marcado{
+        border-radius: 5px;
+        border-left: 10px solid #17A2B8;
+        background-color: rgba(245, 245, 245, 0.1);
+        padding: 5px;
+        font-weight: 600;
+        cursor:pointer;
+    }
+    .horario-marcado:hover{
+        filter: brightness(2);
+    }
+</style>
+<script>
+    $(document).ready(function(){
+        $('#loading-icon').hide();
+        $('.option-menu').on('click', function(){
+            selected = $(this);
+            if($(this).attr('tab') == 'inicio'){
+                location.reload();
+            }
+            $.ajax({
+                url: '../app/views/'+ $(this).attr('tab') + '.php',
+                method: 'GET',
+                beforeSend: function() {
+                    $('#loading-icon').show();
+                },
+                complete: function() {
+                    $('#loading-icon').hide();
+                },
+                success: function(data){
+                    $('.conteudo').html(data);
+                    $('.option-menu').removeClass('active');
+                    selected.addClass('active');
+                }
+            })
+        })
+        $('#agendar, .horario-marcado .novo-agendamento').on('click',function(){
+            $('#Cad-Agendamento').show();
+        })
+        $('#horario').click(function(){
+            $.ajax({
+                url: '../app/views/horario_atendimento.php',
+                method: 'GET',
+                beforeSend: function() {
+                    $('#loading-icon').show();
+                },
+                complete: function() {
+                    $('#loading-icon').hide();
+                },
+                success: function(data){
+                    $('.principal').html(data);
+                }
+            })
+        });
+    })
+</script>
+<div class="text-center align-content-center position-absolute w-100 h-100" style="cursor:progress;" id="loading-icon">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<div class="col-md-12 d-flex">
+    <div class="col-md-2 perfil-container">
+        <div class="d-flex">
+            <div class="col-md-12 text-center">
+                Olá, Bem vindo...
+            </div>
+        </div>
+        <div class="d-flex mt-2">
+            <div class="col-md-12 d-flex justify-content-center">
+                <a href="" class="img-link">
+                    <div class="user-image"><img src="data:image/png;base64,<?= $usuario->getImagem() ?>" alt="" width="100%" height="100%"></div>
+                </a>
+            </div>
+        </div>
+        <div class="d-flex mt-2">
+            <div class="col-md-12 text-center ">
+                <b><?= $usuario->getNome() ?></b> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+        </div>
+        <div class="d-flex mt-2 mx-2">
+            <div class="col-md-12">
+                <div class="d-flex">
+                    <div class="col-md-3">
+                        <a href="" class="img-link">
+                            <div class="shop-image"><img src="data:image/png;base64,<?= $imagem_loja ?>" alt="" width="100%" height="100%"></div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row job">
+                            <b>Barbabeiro</b>
+                        </div>
+                        <div class="row group">
+                            <b><?= $usuario->getGrupo() ?></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-4 justify-content-center">
+            <button class="button-agd" id="agendar"><i class="fa-solid fa-calendar-days"></i> Agendar Agora</button>
+        </div>
+        <div class="d-flex mt-4 justify-content-center">
+            <button class="button-agd"><i class="fa-solid fa-bars-progress"></i> Gerenciar Agenda</button>
+        </div>
+        <div class="d-flex mt-4 justify-content-center">
+            <button class="button-agd" id="horario"><i class="fa-solid fa-clock"></i> Gerenciar Horário</button>
+        </div>
+    </div>
+    
+    <div class="col-md-10 principal">
+        <div class="col-md-12 d-flex">
+            <div class="col-md-2 ms-1 option-menu active" tab="inicio">Início</div>
+            <div class="col-md-2 ms-1 option-menu" tab="clientes">Clientes</div>
+            <div class="col-md-2 ms-1 option-menu" tab="agendamentos">Agendamentos</div>
+            <div class="col-md-2 ms-1 option-menu" tab="servicos">Serviços</div>
+            <div class="col-md-2 ms-1 option-menu" tab="profissionais">Profissionais</div>
+        </div>
+        <div class="col-md-12 d-flex conteudo justify-content-center">
+            <div class="col-md-11 filters filters-dark">
+                <div class="m-4 horarios-listagem">
+                    <?php
+                        $agendamentoBll = new AgendamentoBll(); 
+                        $horarioBll = new HorarioBll();
+                        $intervalos = $horarioBll->array_horario_atendimento(obterDiaSemana(date("Y-m-d")), $_SESSION["Cod_usuario"]);
+                        $agendamentos = $agendamentoBll->gerarIntervalosAgendados(date("Y-m-d"), $_SESSION["Cod_usuario"]);
+                        $intervalos = obterIntervalos($intervalos, $agendamentos);
+                        foreach($intervalos as $intervalo){
+                            ?>
+                            <div class="d-flex list " id="<?= $intervalo["inicio"] ?>">
+                                <div class="col-md-3 my-2 text-center horario-list">
+                                    <?= $intervalo["inicio"] ?>
+                                </div>
+                                <div class="col-md-8">
+                                    <?php
+                                    if(!empty($intervalo["subintervalos"])){
+                                        foreach($intervalo["subintervalos"] as $sub){
+                                            $cliente = $clienteBll->select_by_code($sub["cliente_cod"] );
+                                            $servico = $servicoBll->select_by_code($sub["servico_cod"] );
+                                        ?>
+                                        <div class="horario-marcado my-2">
+                                            <div><?= $cliente->getNome(); ?></div>
+                                            <div><?= $servico->getNome(); ?> <?= 'R$ ' . number_format($servico->getPreco(), 2, ',', '.'); ?></div>
+                                            <div><?= $sub["agendamento_inicio"]; ?> - <?= $sub["agendamento_fim"]; ?></div>
+                                        </div>
+                                        <?php
+                                        }
+                                        if($sub["agendamento_inicio"] != $intervalo["inicio"] or $sub["agendamento_fim"] != $intervalo["fim"] ){
+                                        ?>
+                                        <div class="horario-marcado my-2">
+                                            <div class="novo-agendamento">
+                                                <i class="fa-solid fa-square-plus"></i> Novo Agendamento
+                                            </div>
+                                        </div>
+                                        <?php
+                                        }
+                                    }else{
+                                        ?>
+                                        <div class="horario-marcado my-2">
+                                            <div class="novo-agendamento">
+                                                <i class="fa-solid fa-square-plus"></i> Novo Agendamento
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include '../app/views/agendamento_form.php' ?>
+<?php include '../app/views/footer.php'; ?>
